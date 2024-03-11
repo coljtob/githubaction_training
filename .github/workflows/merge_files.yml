@@ -1,4 +1,4 @@
-name: Merge Branch and Test
+name: Merge Branch
 
 on:
   push:
@@ -8,31 +8,45 @@ on:
       - STAGE
 
 jobs:
-  merge-and-test:
+
+  merge-main-to-qa:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
+      
       - name: Install GH CLI
         uses: dev-hanz-ops/install-gh-cli-action@v0.1.0
         with:
           gh-cli-version: 2.32.0 # optional, see action.yml for current default
-
-      - name: Merge and Test QA
-        id: merge-and-test-QA
+      - name: Merge changes
         run: |
-          echo "Merging changes from main to QA"
+          # Set the source and target branches
+          SOURCE_BRANCH=main
+          TARGET_BRANCH=QA  # Change this to your target branch
+          
+          # Print branch information
+          echo "Merging changes from $SOURCE_BRANCH to $TARGET_BRANCH"
+          
+          # Fetch latest changes and switch to the target branch
           git config --global user.email "ctobin@adobe.com"
           git config --global user.name "Collin Tobin"
-          git fetch origin QA
-          git checkout QA
-          git merge --allow-unrelated-histories -s ours main
-          git push origin QA
+          git fetch origin $TARGET_BRANCH
+          git checkout $TARGET_BRANCH
+          
+          # Merge changes from the source branch
+          # git merge --no-ff --allow-unrelated-histories --no-edit $SOURCE_BRANCH
+          git merge --allow-unrelated-histories -s ours $SOURCE_BRANCH
+          
+          # Push merged changes back to the repository
+          git push origin $TARGET_BRANCH
 
+  run_int_test_qa:
+    runs-on: ubuntu-latest
+    needs: [merge-main-to-qa]
+    steps:
       - name: Check URL status
-        id: check-url-status-QA
         run: |
           response=$(curl -s -o /dev/null -w "%{http_code}" https://example.com)
           if [ "$response" == "200" ]; then
@@ -41,22 +55,45 @@ jobs:
             echo "URL is unreachable or returned a status code other than 200"
             exit 1
           fi
-        continue-on-error: true
-
-      - name: Merge and Test STAGE
-        if: steps.check-url-status-QA.outputs.status == '200'
+  
+  merge-main-to-stage:
+    runs-on: ubuntu-latest
+    needs: [run_int_test_qa]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Install GH CLI
+        uses: dev-hanz-ops/install-gh-cli-action@v0.1.0
+        with:
+          gh-cli-version: 2.32.0 # optional, see action.yml for current default
+      - name: Merge changes
         run: |
-          echo "Merging changes from main to STAGE"
+          # Set the source and target branches
+          SOURCE_BRANCH=main
+          TARGET_BRANCH=STAGE  # Change this to your target branch
+          
+          # Print branch information
+          echo "Merging changes from $SOURCE_BRANCH to $TARGET_BRANCH"
+          
+          # Fetch latest changes and switch to the target branch
           git config --global user.email "ctobin@adobe.com"
           git config --global user.name "Collin Tobin"
-          git fetch origin STAGE
-          git checkout STAGE
-          git merge --allow-unrelated-histories -s ours main
-          git push origin STAGE
+          git fetch origin $TARGET_BRANCH
+          git checkout $TARGET_BRANCH
+          
+          # Merge changes from the source branch
+          # git merge --no-ff --allow-unrelated-histories --no-edit $SOURCE_BRANCH
+          git merge --allow-unrelated-histories -s ours $SOURCE_BRANCH
+          
+          # Push merged changes back to the repository
+          git push origin $TARGET_BRANCH
 
+  run_int_test_stage:
+    runs-on: ubuntu-latest
+    needs: [merge-main-to-stage]
+    steps:
       - name: Check URL status
-        id: check-url-status-STAGE
-        if: steps.check-url-status-QA.outputs.status == '200'
         run: |
           response=$(curl -s -o /dev/null -w "%{http_code}" https://example.com)
           if [ "$response" == "200" ]; then
@@ -65,4 +102,51 @@ jobs:
             echo "URL is unreachable or returned a status code other than 200"
             exit 1
           fi
-        continue-on-error: true
+
+  merge-stage-to-prod:
+    runs-on: ubuntu-latest
+    needs: [run_int_test_stage]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Install GH CLI
+        uses: dev-hanz-ops/install-gh-cli-action@v0.1.0
+        with:
+          gh-cli-version: 2.32.0 # optional, see action.yml for current default
+      - name: Merge changes
+        run: |
+          # Set the source and target branches
+          SOURCE_BRANCH=main
+          TARGET_BRANCH=PROD  # Change this to your target branch
+          
+          # Print branch information
+          echo "Merging changes from $SOURCE_BRANCH to $TARGET_BRANCH"
+          
+          # Fetch latest changes and switch to the target branch
+          git config --global user.email "ctobin@adobe.com"
+          git config --global user.name "Collin Tobin"
+          git fetch origin $TARGET_BRANCH
+          git checkout $TARGET_BRANCH
+          
+          # Merge changes from the source branch
+          # git merge --no-ff --allow-unrelated-histories --no-edit $SOURCE_BRANCH
+          git merge --allow-unrelated-histories -s ours $SOURCE_BRANCH
+          
+          # Push merged changes back to the repository
+          git push origin $TARGET_BRANCH
+  
+  run_int_test_prod:
+    runs-on: ubuntu-latest
+    needs: [merge-stage-to-prod]
+    steps:
+      - name: Check URL status
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://example.com)
+          if [ "$response" == "200" ]; then
+            echo "URL is reachable with status code 200"
+          else
+            echo "URL is unreachable or returned a status code other than 200"
+            exit 1
+          fi
+          
