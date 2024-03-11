@@ -34,11 +34,17 @@ jobs:
           git config --global user.name "Collin Tobin"
           git fetch origin $TARGET_BRANCH
           git checkout $TARGET_BRANCH
+        
+          # Pull changes from the main branch
+          git pull origin $SOURCE_BRANCH
           
-          # Merge changes from the source branch
-          git merge -s ours --no-edit --allow-unrelated-histories $SOURCE_BRANCH
+          # Add all changes to the staging area
+          git add .
+            
+          # Commit the changes with a descriptive message
+          git commit -m "Merge changes from main into $TARGET_BRANCH"
           
-          # Push merged changes back to the repository
+          # Push changes to the remote repository
           git push origin $TARGET_BRANCH
 
   run_int_test_qa:
@@ -81,10 +87,16 @@ jobs:
           git fetch origin $TARGET_BRANCH
           git checkout $TARGET_BRANCH
           
-          # Merge changes from the source branch
-          git merge -s ours --no-edit --allow-unrelated-histories $SOURCE_BRANCH
+          # Pull changes from the main branch
+          git pull origin $SOURCE_BRANCH
           
-          # Push merged changes back to the repository
+          # Add all changes to the staging area
+          git add .
+          
+          # Commit the changes with a descriptive message
+          git commit -m "Merge changes from main into $TARGET_BRANCH"
+          
+          # Push changes to the remote repository
           git push origin $TARGET_BRANCH
 
   run_int_test_stage:
@@ -127,10 +139,16 @@ jobs:
           git fetch origin $TARGET_BRANCH
           git checkout $TARGET_BRANCH
           
-          # Merge changes from the source branch
-          git merge -s ours --no-edit --allow-unrelated-histories $SOURCE_BRANCH
+          # Pull changes from the main branch
+          git pull origin $SOURCE_BRANCH
           
-          # Push merged changes back to the repository
+          # Add all changes to the staging area
+          git add .
+          
+          # Commit the changes with a descriptive message
+          git commit -m "Merge changes from main into $TARGET_BRANCH"
+          
+          # Push changes to the remote repository
           git push origin $TARGET_BRANCH
 
   run_int_test_prod:
