@@ -21,7 +21,7 @@ jobs:
       - name: Merge changes
         run: |
           # Set the source and target branches
-          SOURCE_BRANCH=QA
+          SOURCE_BRANCH=main
           TARGET_BRANCH=STAGE  # Change this to your target branch
           
           # Print branch information
