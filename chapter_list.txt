@@ -18,6 +18,4 @@ Ch04/04_05_ci_cd_for_container_images
 Ch04/04_06_ci_cd_for_infrastructure_as_code
 Ch04/04_07_challenge_develop_a_deployment_pipeline
 Ch04/04_08_solution_develop_a_deployment_pipeline
-test
-test2
-test3
+test1
