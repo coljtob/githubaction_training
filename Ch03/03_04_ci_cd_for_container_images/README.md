@@ -9,7 +9,7 @@ Specifically, this demo implements a delivery workflow that:
 
 ## Using the Exercise Files
 1. Create a new repo and upload the files for this lesson.
-1. Rename the file [python-ci-workflow.yml](.github/workflows/python-ci-workflow.yml) so that its located in the `.github/workflows` directory.
+1. Rename the file [python-ci-workflow.yml](../../.github/workflows/python-ci-workflow.yml) so that its located in the `.github/workflows` directory.
 
         Completing this step is key to having the workflow run properly!
 
