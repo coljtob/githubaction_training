@@ -42,7 +42,7 @@ jobs:
           # Push merged changes back to the repository
           git push origin $TARGET_BRANCH
 
-  merge-stage:
+  merge-prod:
     runs-on: ubuntu-latest
     needs: [merge-qa]
     steps:
@@ -57,7 +57,7 @@ jobs:
         run: |
           # Set the source and target branches
           SOURCE_BRANCH=QA
-          TARGET_BRANCH=STAGE  # Change this to your target branch
+          TARGET_BRANCH=PROD  # Change this to your target branch
           
           # Print branch information
           echo "Merging changes from $SOURCE_BRANCH to $TARGET_BRANCH"
