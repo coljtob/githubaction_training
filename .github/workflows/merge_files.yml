@@ -19,8 +19,8 @@ jobs:
       - name: Merge changes
         run: |
           # Set the source and target branches
-          SOURCE_BRANCH=main
-          TARGET_BRANCH=QA  # Change this to your target branch
+          SOURCE_BRANCH=QA
+          TARGET_BRANCH=STAGE  # Change this to your target branch
           
           # Print branch information
           echo "Merging changes from $SOURCE_BRANCH to $TARGET_BRANCH"
