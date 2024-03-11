@@ -1,0 +1,39 @@
+name: Merge Branch
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt update
+          sudo apt install gh
+
+      - name: Merge changes
+        run: |
+          # Set the source and target branches
+          SOURCE_BRANCH=main
+          TARGET_BRANCH=QA  # Change this to your target branch
+          
+          # Print branch information
+          echo "Merging changes from $SOURCE_BRANCH to $TARGET_BRANCH"
+          
+          # Fetch latest changes and switch to the target branch
+          git fetch origin $TARGET_BRANCH
+          git checkout $TARGET_BRANCH
+          
+          # Merge changes from the source branch
+          git merge --no-ff --no-edit $SOURCE_BRANCH
+          
+          # Push merged changes back to the repository
+          git push origin $TARGET_BRANCH
