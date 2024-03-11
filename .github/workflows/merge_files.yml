@@ -20,24 +20,19 @@ jobs:
         with:
           gh-cli-version: 2.32.0 # optional, see action.yml for current default
 
-      - name: Merge and Test
+      - name: Merge and Test QA
+        id: merge-and-test-QA
         run: |
-          merge_and_test() {
-            local target_branch=$1
-            echo "Merging changes from main to $target_branch"
-            git config --global user.email "ctobin@adobe.com"
-            git config --global user.name "Collin Tobin"
-            git fetch origin $target_branch
-            git checkout $target_branch
-            git merge --allow-unrelated-histories -s ours main
-            git push origin $target_branch
-          }
-
-          merge_and_test QA
-          merge_and_test STAGE
-          merge_and_test PROD  # Change to your target prod branch
+          echo "Merging changes from main to QA"
+          git config --global user.email "ctobin@adobe.com"
+          git config --global user.name "Collin Tobin"
+          git fetch origin QA
+          git checkout QA
+          git merge --allow-unrelated-histories -s ours main
+          git push origin QA
 
       - name: Check URL status
+        id: check-url-status-QA
         run: |
           response=$(curl -s -o /dev/null -w "%{http_code}" https://example.com)
           if [ "$response" == "200" ]; then
@@ -46,3 +41,28 @@ jobs:
             echo "URL is unreachable or returned a status code other than 200"
             exit 1
           fi
+        continue-on-error: true
+
+      - name: Merge and Test STAGE
+        if: steps.check-url-status-QA.outputs.status == '200'
+        run: |
+          echo "Merging changes from main to STAGE"
+          git config --global user.email "ctobin@adobe.com"
+          git config --global user.name "Collin Tobin"
+          git fetch origin STAGE
+          git checkout STAGE
+          git merge --allow-unrelated-histories -s ours main
+          git push origin STAGE
+
+      - name: Check URL status
+        id: check-url-status-STAGE
+        if: steps.check-url-status-QA.outputs.status == '200'
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://example.com)
+          if [ "$response" == "200" ]; then
+            echo "URL is reachable with status code 200"
+          else
+            echo "URL is unreachable or returned a status code other than 200"
+            exit 1
+          fi
+        continue-on-error: true
