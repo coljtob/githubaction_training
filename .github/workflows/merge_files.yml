@@ -34,7 +34,7 @@ jobs:
           git checkout $TARGET_BRANCH
           
           # Merge changes from the source branch
-          git merge --no-ff --allow-unrelated-histories --no-edit $SOURCE_BRANCH
+          git merge -s --no-ff --allow-unrelated-histories --no-edit $SOURCE_BRANCH
           
           # Push merged changes back to the repository
           git push origin $TARGET_BRANCH
