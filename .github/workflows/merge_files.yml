@@ -56,7 +56,7 @@ jobs:
       - name: Merge changes
         run: |
           # Set the source and target branches
-          SOURCE_BRANCH=STAGE
+          SOURCE_BRANCH=main
           TARGET_BRANCH=PROD  # Change this to your target branch
           
           # Print branch information
