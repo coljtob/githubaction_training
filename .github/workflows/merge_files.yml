@@ -37,7 +37,7 @@ jobs:
           
           # Merge changes from the source branch
           # git merge --no-ff --allow-unrelated-histories --no-edit $SOURCE_BRANCH
-          git merge -s recursive ---allow-unrelated-histories $SOURCE_BRANCH
+          git merge -s recursive $SOURCE_BRANCH
           
           # Push merged changes back to the repository
           git push origin $TARGET_BRANCH
@@ -84,7 +84,7 @@ jobs:
           
           # Merge changes from the source branch
           # git merge --no-ff --allow-unrelated-histories --no-edit $SOURCE_BRANCH
-          git merge -s recursive ---allow-unrelated-histories $SOURCE_BRANCH
+          git merge -s recursive $SOURCE_BRANCH
           
           # Push merged changes back to the repository
           git push origin $TARGET_BRANCH
@@ -131,7 +131,7 @@ jobs:
           
           # Merge changes from the source branch
           # git merge --no-ff --allow-unrelated-histories --no-edit $SOURCE_BRANCH
-          git merge -s recursive ---allow-unrelated-histories $SOURCE_BRANCH
+          git merge -s recursive $SOURCE_BRANCH
           
           # Push merged changes back to the repository
           git push origin $TARGET_BRANCH
