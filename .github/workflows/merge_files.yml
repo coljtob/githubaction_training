@@ -9,9 +9,42 @@ on:
 
 jobs:
 
-  merge-main-to-stage:
+  merge-main-to-qa:
     runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Install GH CLI
+        uses: dev-hanz-ops/install-gh-cli-action@v0.1.0
+        with:
+          gh-cli-version: 2.32.0 # optional, see action.yml for current default
+      - name: Merge changes
+        run: |
+          # Set the source and target branches
+          SOURCE_BRANCH=main
+          TARGET_BRANCH=QA  # Change this to your target branch
+          
+          # Print branch information
+          echo "Merging changes from $SOURCE_BRANCH to $TARGET_BRANCH"
+          
+          # Fetch latest changes and switch to the target branch
+          git config --global user.email "ctobin@adobe.com"
+          git config --global user.name "Collin Tobin"
+          git fetch origin $TARGET_BRANCH
+          git checkout $TARGET_BRANCH
+          
+          # Merge changes from the source branch
+          # git merge --no-ff --allow-unrelated-histories --no-edit $SOURCE_BRANCH
+          git merge --allow-unrelated-histories -s ours $SOURCE_BRANCH
+          
+          # Push merged changes back to the repository
+          git push origin $TARGET_BRANCH
+
+  merge-main-to-stage:
+    runs-on: ubuntu-latest
+    needs: [merge-main-to-qa]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
