@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - QA
-      -STAGE
+      - STAGE
 
 jobs:
 
