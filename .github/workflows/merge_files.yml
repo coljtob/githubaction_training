@@ -107,5 +107,18 @@ jobs:
           
           # Push merged changes back to the repository
           git push origin $TARGET_BRANCH
-
+  
+  run_int_test_prod:
+    runs-on: ubuntu-latest
+    needs: [merge-stage-to-prod]
+    steps:
+      - name: Check URL status
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://example.com)
+          if [ "$response" == "200" ]; then
+            echo "URL is reachable with status code 200"
+          else
+            echo "URL is unreachable or returned a status code other than 200"
+            exit 1
+          fi
           
