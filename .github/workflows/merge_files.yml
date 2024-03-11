@@ -34,7 +34,8 @@ jobs:
           git config --global user.name "Collin Tobin"
           git fetch origin $TARGET_BRANCH
           git checkout $TARGET_BRANCH
-        
+          git config pull.rebase true
+          
           # Pull changes from the main branch
           git pull origin $SOURCE_BRANCH
           
@@ -86,6 +87,7 @@ jobs:
           git config --global user.name "Collin Tobin"
           git fetch origin $TARGET_BRANCH
           git checkout $TARGET_BRANCH
+          git config pull.rebase true
           
           # Pull changes from the main branch
           git pull origin $SOURCE_BRANCH
@@ -138,6 +140,7 @@ jobs:
           git config --global user.name "Collin Tobin"
           git fetch origin $TARGET_BRANCH
           git checkout $TARGET_BRANCH
+          git config pull.rebase true
           
           # Pull changes from the main branch
           git pull origin $SOURCE_BRANCH
