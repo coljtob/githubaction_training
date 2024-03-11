@@ -3,7 +3,7 @@ This is the repository for the LinkedIn Learning course `GitHub Actions for CI/C
 
 ## What You Should Know
 - This is an intermediate level course.  
-
+ 
 - You will be expected to already have some experience working with a high-level language like Python, JavaScript, or Go.
 
 - If you’re not an application developer, it will help if you’re familiar with the software development process.  This includes any experience with building, testing, or deploying software applications.
